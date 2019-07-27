@@ -118,8 +118,9 @@ if __name__ == '__main__':
                 param_line += ':'
             div, mod = divmod(div, param_list[j].count)
             value = str(param_list[j].calclate_value(mod))
-            inputs[j].send_keys(Keys.CONTROL,'a')
-            inputs[j].send_keys(Keys.DELETE)
+            input_value = inputs[j].get_attribute('value')
+            for _ in range(len(input_value)):
+                inputs[j].send_keys(Keys.BACK_SPACE)
             inputs[j].send_keys(value)
             param_line += value
 
