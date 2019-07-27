@@ -5,6 +5,7 @@ import csv
 import math
 import time
 import json
+import traceback
 import configparser
 from decimal import Decimal
 from datetime import datetime
@@ -81,6 +82,12 @@ if __name__ == '__main__':
         pattern_count *= param_info.count
         param_list.append(param_info)
 
+    # 開始
+    print('-----------------------------------------')
+    print('pattern : {}'.format(pattern_count))
+    print('necessary time : {}'.format(convert_time(int(pattern_count * 4.5))))
+    print('-----------------------------------------')
+
     # ブラウザ起動
     browser = webdriver.Chrome(driver_path)
     browser.get(chart_url)
@@ -96,11 +103,6 @@ if __name__ == '__main__':
     browser.find_element_by_xpath('//BUTTON[@class="tv-button tv-button--no-border-radius tv-button--size_large tv-button--primary_ghost tv-button--loader"]').click()
     wait_element(browser, '//DIV[@class="icon-button backtesting-open-format-dialog apply-common-tooltip"]')
 
-    # 開始
-    print('-----------------------------------------')
-    print('pattern : {}'.format(pattern_count))
-    print('necessary time : {}'.format(convert_time(int(pattern_count * 4.5))))
-    print('-----------------------------------------')
     for i in range(pattern_count):
 
         # 設定ボタン押下
@@ -120,19 +122,30 @@ if __name__ == '__main__':
             inputs[j].send_keys(Keys.DELETE)
             inputs[j].send_keys(value)
             param_line += value
-        
+
         # OKボタン押下
         find_element_from_text(browser, '//BUTTON[@class="button-1iktpaT1- size-m-2G7L7Qat- intent-primary-1-IOYcbg- appearance-default-dMjF_2Hu-"]', 'OK').click()
         time.sleep(3)
 
         # 結果取得
-        profit = browser.find_element_by_xpath('//DIV[@class="report-data"]/DIV[1]/STRONG[1]')
-        win_rate = browser.find_element_by_xpath('//DIV[@class="report-data"]/DIV[3]/STRONG[1]')
-        profit_factor = browser.find_element_by_xpath('//DIV[@class="report-data"]/DIV[4]/STRONG[1]')
-        drawdown = browser.find_element_by_xpath('//DIV[@class="report-data"]/DIV[5]/P[1]/SPAN[1]')
-
+        while True:
+            try:
+                profit = browser.find_element_by_xpath('//DIV[@class="report-data"]/DIV[1]/STRONG[1]')
+                win_rate = browser.find_element_by_xpath('//DIV[@class="report-data"]/DIV[3]/STRONG[1]')
+                profit_factor = browser.find_element_by_xpath('//DIV[@class="report-data"]/DIV[4]/STRONG[1]')
+                drawdown = browser.find_element_by_xpath('//DIV[@class="report-data"]/DIV[5]/P[1]/SPAN[1]')
+                write_line = [profit.text, win_rate.text, profit_factor.text, drawdown.text]
+            except KeyboardInterrupt:
+                raise
+            except:
+                ex, ms, tb = sys.exc_info()
+                info = traceback.format_exception(ex, ms, tb)
+                print(info)
+                time.sleep(3)
+            else:
+                break
+                
         # 書き込み
-        write_line = [profit.text, win_rate.text, profit_factor.text, drawdown.text]
         for j in range(len(write_line)):
             match = re.match(r'([0-9]+\.?[0-9]*)', write_line[j])
             write_line[j] = match.group()
