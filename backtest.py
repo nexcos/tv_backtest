@@ -107,12 +107,12 @@ if __name__ == '__main__':
 
         # 設定ボタン押下
         browser.find_element_by_xpath('//DIV[@class="icon-button backtesting-open-format-dialog apply-common-tooltip"]').click()
-        wait_element(browser, '//INPUT[@class="innerInput-29Ku0bwF-"]')
+        wait_element(browser, '//INPUT[@class="innerInput-29Ku0bwF"]')
 
         # パラメータ入力
         div = i
         param_line = ''
-        inputs = browser.find_elements_by_xpath('//INPUT[@class="innerInput-29Ku0bwF-"]')
+        inputs = browser.find_elements_by_xpath('//INPUT[@class="innerInput-29Ku0bwF"]')
         for j in range(param_count):
             if j > 0:
                 param_line += ':'
