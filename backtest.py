@@ -101,12 +101,12 @@ if __name__ == '__main__':
     browser.find_element_by_xpath('//INPUT[@name="username"]').send_keys(account)
     browser.find_element_by_xpath('//INPUT[@name="password"]').send_keys(password)
     browser.find_element_by_xpath('//BUTTON[@class="tv-button tv-button--no-border-radius tv-button--size_large tv-button--primary_ghost tv-button--loader"]').click()
-    wait_element(browser, '//DIV[@class="icon-button backtesting-open-format-dialog apply-common-tooltip"]')
+    wait_element(browser, '//DIV[@class="icon-button js-backtesting-open-format-dialog apply-common-tooltip"]')
 
     for i in range(pattern_count):
 
         # 設定ボタン押下
-        browser.find_element_by_xpath('//DIV[@class="icon-button backtesting-open-format-dialog apply-common-tooltip"]').click()
+        browser.find_element_by_xpath('//DIV[@class="icon-button js-backtesting-open-format-dialog apply-common-tooltip"]').click()
         wait_element(browser, '//INPUT[@class="innerInput-29Ku0bwF"]')
 
         # パラメータ入力
@@ -125,7 +125,7 @@ if __name__ == '__main__':
             param_line += value
 
         # OKボタン押下
-        find_element_from_text(browser, '//BUTTON[@class="button-1iktpaT1- size-m-2G7L7Qat- intent-primary-1-IOYcbg- appearance-default-dMjF_2Hu-"]', 'OK').click()
+        find_element_from_text(browser, '//BUTTON[@class="button-1iktpaT1 size-m-2G7L7Qat intent-primary-1-IOYcbg appearance-default-dMjF_2Hu"]', 'OK').click()
         time.sleep(3)
 
         # 結果取得
